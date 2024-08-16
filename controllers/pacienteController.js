@@ -68,24 +68,22 @@ exports.actualizarPaciente = async (req, res) => {
     }
 };
 
-// Método para eliminar (inhabilitar) un paciente
+// Método para eliminar (eliminar físicamente) un paciente
 exports.eliminarPaciente = async (req, res) => {
     try {
         const { id } = req.params;
-        let paciente = await Paciente.findById(id);
+        const paciente = await Paciente.findByIdAndDelete(id);
 
         if (!paciente) {
             return res.status(404).json({ msg: 'Paciente no encontrado' });
         }
 
-        // Marcar el paciente como inhabilitado
-        paciente = await Paciente.findByIdAndUpdate(id, { revisado: false }, { new: true });
-
-        res.json({ msg: 'Paciente inhabilitado', paciente });
+        res.json({ msg: 'Paciente eliminado', paciente });
     } catch (error) {
         res.status(500).send('Error en el servidor');
     }
 };
+
 
 // Método para realizar una búsqueda personalizada de pacientes
 //El método de búsqueda personalizada debe permitir buscar por sexo, fechaIngreso y enfermedad.
